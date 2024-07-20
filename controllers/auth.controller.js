@@ -89,6 +89,7 @@ exports.verifyOTP = asyncHandler(async (req, res) => {
     }
 
     if (otp !== result.otp) {
+
         return res.status(401).json({ message: "Invalid OTP" })
     }
     const token = jwt.sign({ userId: result._id }, process.env.JWT_KEY, { expiresIn: "1d" })
@@ -110,4 +111,9 @@ exports.verifyOTP = asyncHandler(async (req, res) => {
     // Res
 
 
+})
+
+exports.logoutAdmin = asyncHandler(async (req, res) => {
+    res.clearCookie("admin")
+    res.json({ message: "Admin Logout Success" })
 })
