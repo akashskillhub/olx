@@ -7,7 +7,11 @@ exports.verifyUserEmail = asyncHandler(async (req, res) => {
     console.log(result);
     const otp = Math.floor(10000 + Math.random() * 900000)
     await User.findByIdAndUpdate(req.loggedInUser, { emailCode: otp })
-    const isSend = await sendEmail({ to: result.email, subject: "Verify Email", message: otp })
+    const isSend = await sendEmail({
+        to: result.email,
+        subject: "Verify Email",
+        message: `Your OTP ${otp}`
+    })
     if (isSend) {
         res.json({ message: "Verification Send Success" })
     } else {
