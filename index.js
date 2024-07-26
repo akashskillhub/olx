@@ -19,6 +19,9 @@ app.use("/api/auth", require("./routes/auth.routes"))
 app.use("/api/user", require("./routes/user.route"))
 
 app.use("*", (req, res) => {
+    console.log(req.url);
+    console.log(req.baseUrl);
+    console.log(req.method);
     res.status(404).json({ message: "Resource Not Found" })
 })
 app.use((err, req, res, next) => {
