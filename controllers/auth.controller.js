@@ -175,11 +175,12 @@ exports.loginUser = asyncHandler(async (req, res) => {
             email: result.email,
             mobile: result.mobile,
             avatar: result.avatar,
-            verified: result.verified,
+            emailVerified: result.emailVerified,
+            mobileVerified: result.mobileVerified,
         }
     })
 })
 exports.logoutUser = asyncHandler(async (req, res) => {
-    res.clearCookie("User")
+    res.clearCookie("user")
     res.json({ message: "User Logout Success" })
 })
