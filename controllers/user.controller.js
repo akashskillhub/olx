@@ -2,6 +2,8 @@ const asyncHandler = require("express-async-handler")
 const User = require("../models/User")
 const sendEmail = require("../utils/email")
 const { sendSMS } = require("../utils/sms")
+const { checkEmpty } = require("../utils/checkEmpty")
+const Posts = require("../models/Posts")
 exports.verifyUserEmail = asyncHandler(async (req, res) => {
     console.log(req.loggedInUser)
     const result = await User.findById(req.loggedInUser)
@@ -69,5 +71,17 @@ exports.verifyMobileOTP = asyncHandler(async (req, res) => {
             mobileVerified: updatedUser.mobileVerified,
         }
     })
+
+})
+exports.addPost = asyncHandler(async (req, res) => {
+    const { title, desc, price, images, location } = req.body
+    const { error, isError } = checkEmpty({ title, desc, price, images, location })
+    if (isError) {
+        return res.status(400).json({ message: "All Fields Required", error })
+    }
+    // 👇 modify this code to support cloudnary
+
+    await Posts.create({ title, desc, price, images, location, user: req.loggedInUser })
+    res.json({ message: "post create success" })
 
 })
