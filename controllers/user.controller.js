@@ -4,6 +4,7 @@ const sendEmail = require("../utils/email")
 const { sendSMS } = require("../utils/sms")
 const { checkEmpty } = require("../utils/checkEmpty")
 const Posts = require("../models/Posts")
+const upload = require("../utils/upload")
 exports.verifyUserEmail = asyncHandler(async (req, res) => {
     console.log(req.loggedInUser)
     const result = await User.findById(req.loggedInUser)
@@ -86,15 +87,19 @@ exports.getLocation = asyncHandler(async (req, res) => {
     res.json({ message: "Location Fetch Success", result: x.results[0].formatted })
 })
 exports.addPost = asyncHandler(async (req, res) => {
-    const { title, desc, price, images, location, category, } = req.body
-    const { error, isError } = checkEmpty({ title, desc, price, images, location, category })
-    if (isError) {
-        return res.status(400).json({ message: "All Fields Required", error })
-    }
+    upload(req, res, async err => {
+        const { title, desc, price, location, category, } = req.body
+        const { error, isError } = checkEmpty({ title, desc, price, location, category })
+        if (isError) {
+            return res.status(400).json({ message: "All Fields Required", error })
+        }
 
-    // 👇 modify this code to support cloudnary
+        console.log(req.files);
 
-    await Posts.create({ title, desc, price, images, location, category, user: req.loggedInUser })
-    res.json({ message: "post create success" })
+        // 👇 modify this code to support cloudnary
 
+        // await Posts.create({ title, desc, price, images, location, category, user: req.loggedInUser })
+        res.json({ message: "post create success" })
+
+    })
 })
