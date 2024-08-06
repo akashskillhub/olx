@@ -94,7 +94,8 @@ exports.addPost = asyncHandler(async (req, res) => {
             return res.status(400).json({ message: "All Fields Required", error })
         }
 
-        console.log(req.files);
+        console.log(req.files)
+        console.log(req.file)
 
         // 👇 modify this code to support cloudnary
 
